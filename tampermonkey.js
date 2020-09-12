@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Queslar Crafting Service Bullshit
 // @namespace    http://tampermonkey.net/
-// @version      0.7
+// @version      0.7.1
 // @description  Tracking this stupid shit since Blah doesn't
 // @author       trgKai
 // @match        https://www.queslar.com/
@@ -250,7 +250,6 @@
         document.getElementById("logDiv").innerHTML = "";
         var count = completionList.length;
         for (var i = 0; i < completionList.length; i++) {
-            console.log(completionList[i]);
             if (completionList[i].type == currentItem.item_type && completionList[i].player == currentItem.player_id && completionList[i].level == currentItem.level_requirement) {
                 continue;
             }
@@ -321,7 +320,6 @@
             lastItem = currentItem.id;
         }
         else if (lastItem != currentItem.id) {
-            console.log("Finished new item.");
             lastItem = currentItem.id;
 
             found = 0;
@@ -330,13 +328,10 @@
                 for (var x = 0; x < villages[i].members.length; x++) {
                     if (villages[i].members[x].player_id == currentItem.player_id) {
                         found = 1;
-                        console.log("Found in my kingdom, should add to completion list.");
-
                     }
                 }
             }
             if (found == 1 && currentItem.player_id != myId) {
-                console.log("Adding to completion list.");
                 completionList[completionList.length] = Object();
                 completionList[completionList.length-1].player = currentItem.player_id;
                 completionList[completionList.length-1].actions = currentItem.crafted_actions_required;
@@ -460,7 +455,7 @@
         }
 
         var time = 0;
-        var craftSpeed = 1;
+        var craftSpeed = 1 + playerGeneralService.partyService.partyInformation[myId].equipment.crafting;
         document.getElementById("queueDiv").innerHTML = '<span id="queueLen"></span> queued for <span id="queueValue"></span><br />';
         serviceQueue.forEach(function(element) {
             queueCounter++;
