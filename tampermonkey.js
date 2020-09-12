@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Queslar Crafting Service Bullshit
 // @namespace    http://tampermonkey.net/
-// @version      0.7.1
+// @version      0.7.2
 // @description  Tracking this stupid shit since Blah doesn't
 // @author       trgKai
 // @match        https://www.queslar.com/
@@ -443,8 +443,8 @@
                     serviceQueue[serviceQueue.length-1].kingdom = 0;
                 }
                 if (serviceData[queueData[i].id].kingdom == 1) {
-                    serviceData[queueData[i].id].price -= Math.floor(queueData[i].price * KINGDOM_REBATE_PER_ACTION);
-                    serviceQueue[serviceQueue.length-1].price -= Math.floor(queueData[i].price * KINGDOM_REBATE_PER_ACTION);
+                    serviceData[queueData[i].id].price *= (1 - KINGDOM_REBATE_PER_ACTION);
+                    serviceQueue[serviceQueue.length-1].price *= (1 - KINGDOM_REBATE_PER_ACTION);
                 }
             }
             else if (queueData[i].price_type == "level") {
