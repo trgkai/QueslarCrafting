@@ -1,10 +1,11 @@
 // ==UserScript==
 // @name         Queslar Enchanting Service Bullshit
 // @namespace    http://tampermonkey.net/
-// @version      0.1
+// @version      0.1.1
 // @description  Tracking this stupid shit since Blah doesn't
 // @author       trgKai
-// @match        https://test.queslar.com/
+// @match        https://queslar.com/
+// @match        https://www.queslar.com/
 // @grant        GM_setValue
 // @grant        GM_getValue
 // @run-at       document-body
@@ -12,7 +13,7 @@
 
 (function() {
     'use strict';
-    var KINGDOM_REBATE_PER_ACTION = 0.2; // UPDATE THIS TO HOW MUCH PER ACTION YOU WILL REFUND KINGDOM ORDERS
+    var KINGDOM_REBATE_PER_ACTION = 0.20; // Update to your rebate as a decimal (0.20 = 20%)
 
     var playerNames = JSON.parse(GM_getValue("playerNames","[]"));
     var serviceData = JSON.parse(GM_getValue("serviceData","[]"));
