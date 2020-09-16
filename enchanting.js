@@ -4,8 +4,7 @@
 // @version      0.1
 // @description  Tracking this stupid shit since Blah doesn't
 // @author       trgKai
-// @match        https://www.queslar.com/
-// @match        https://queslar.com/
+// @match        https://test.queslar.com/
 // @grant        GM_setValue
 // @grant        GM_getValue
 // @run-at       document-body
@@ -197,9 +196,6 @@
                     serviceQueue[serviceQueue.length-1].kingdom = 0;
                 }
             }
-            else if (currentItem.price_type == "level") {
-                serviceQueue[serviceQueue.length-1].price = currentItem.price_value * currentItem.level_requirement;
-            }
         }
 
         for (var i = 0; i < playerQueue.length; i++) {
@@ -272,11 +268,6 @@
                     serviceData[queueData[i].id].price *= (1 - KINGDOM_REBATE_PER_ACTION);
                     serviceQueue[serviceQueue.length-1].price *= (1 - KINGDOM_REBATE_PER_ACTION);
                 }
-            }
-            else if (queueData[i].price_type == "level") {
-                totalValue += queueData[i].price_value * queueData[i].level_requirement;
-                serviceData[queueData[i].id].price = queueData[i].price_value * queueData[i].level_requirement;
-                serviceQueue[serviceQueue.length-1].price = queueData[i].price_value * queueData[i].level_requirement;
             }
         }
 
