@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Queslar Crafting Service Bullshit
 // @namespace    http://tampermonkey.net/
-// @version      0.8
+// @version      0.8.1
 // @description  Tracking this stupid shit since Blah doesn't
 // @author       trgKai
 // @match        https://www.queslar.com/
@@ -78,8 +78,6 @@
         document.getElementsByTagName("app-action-tracker")[0].children[1].appendChild(boostDiv);
 
         console.log('Setup Complete');
-        playerNames[1421] = "kormara";
-        playerNames[1142] = "Redegl";
         runUpdates();
     }
 
@@ -87,7 +85,7 @@
         updateQueue();
         updateRebates();
         updateBoosts();
-        updateFighters();
+//        updateFighters();
         marketCheck();
         setTimeout(runUpdates,5000);
     }
@@ -123,7 +121,6 @@
                 relics_earned += (i-200) * 250;
             }
         }
-        console.log(relics_earned);
 
         var fighterDiv = document.getElementById("fighterDiv");
         if (!fighterDiv) {
