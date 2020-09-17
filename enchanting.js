@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Queslar Enchanting Service Bullshit
 // @namespace    http://tampermonkey.net/
-// @version      0.1.1
+// @version      0.2
 // @description  Tracking this stupid shit since Blah doesn't
 // @author       trgKai
 // @match        https://queslar.com/
@@ -125,8 +125,17 @@
         var playerGeneralService = rootElement.playerGeneralService;
         var villages = playerGeneralService.playerKingdomService.kingdomData.village;
         var playerQueue = playerGeneralService.playerQueueService.playerEnchantingQueue;
+        if (!playerQueue) {
+            return;
+        }
         var queueData = playerGeneralService.marketService.playerEnchantingService.serviceData.listings;
+        if (!queueData) {
+            return;
+        }
         var currentItem = playerGeneralService.playerEnchantingService.craftedEnchant;
+        if (!currentItem) {
+            return;
+        }
         var myId = playerGeneralService.gameService.playerData.id;
         var totalValue = 0;
         var found = 0;
@@ -273,7 +282,10 @@
         }
 
         var time = 0;
-        var craftSpeed = 1 + playerGeneralService.partyService.partyInformation[myId].equipment.enchanting;
+        var craftSpeed = 1;
+        if (playerGeneralService.partyService.partyInformation[myId].equipment.enchanting) {
+            craftSpeed = 1 + playerGeneralService.partyService.partyInformation[myId].equipment.enchanting;
+        }
         document.getElementById("queueDiv").innerHTML = '<span id="queueLen"></span> queued for <span id="queueValue"></span><br />';
         serviceQueue.forEach(function(element) {
             queueCounter++;
