@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Queslar Crafting Service Bullshit
 // @namespace    http://tampermonkey.net/
-// @version      0.8.1
+// @version      0.8.5
 // @description  Tracking this stupid shit since Blah doesn't
 // @author       trgKai
 // @match        https://www.queslar.com/
@@ -13,7 +13,7 @@
 
 (function() {
     'use strict';
-    var KINGDOM_REBATE_PER_ACTION = 0.2; // UPDATE THIS TO HOW MUCH PER ACTION YOU WILL REFUND KINGDOM ORDERS
+    var KINGDOM_REBATE_PER_ACTION = 0.10; // UPDATE THIS TO HOW MUCH PER ACTION YOU WILL REFUND KINGDOM ORDERS
 
     var playerNames = JSON.parse(GM_getValue("playerNames","[]"));
     var serviceData = JSON.parse(GM_getValue("serviceData","[]"));
@@ -151,15 +151,38 @@
         return cost;
     }
 
+    function getVillageBoost(level) {
+        var boost = 0;
+
+        boost = level;
+        if (level > 20) { boost += (level - 20); }
+        if (level > 40) { boost += (level - 40); }
+        if (level > 60) { boost += (level - 60); }
+        if (level > 80) { boost += (level - 80); }
+
+        return boost / 100;
+    }
+
+    function getHouseBoost(level) {
+        var boost = 0;
+        boost = level;
+
+        if (level > 15) { boost += (level - 15); }
+        if (level > 30) { boost += (level - 30); }
+        if (level > 45) { boost += (level - 45); }
+
+        return boost;
+    }
+
     function getAverage(craftingLevel, villageBoost, kingdomBoost, craftingBoost, craftingHouse, consistencyBoost, consistencyHouse, powerBoost, powerHouse, luckBoost, luckHouse) {
-        var base = 2 * (1 +((craftingBoost * 0.05/100) + (craftingHouse / 100)));
-        var consistency = 1000 / (1000 + (((consistencyBoost * 0.05/100)+(consistencyHouse / 100)) * 1000));
-        var capacity = 2 * (((powerBoost * 0.05/100)+(powerHouse/100)));
-        var minimum = base * (1 - consistency) * (1 + (craftingLevel / 10000)) * (1 + villageBoost) * (1 + kingdomBoost) * 1.1 / 3;
-        var maximum = (base + capacity) * (1 + (craftingLevel / 10000)) * (1 + villageBoost) * (1 + kingdomBoost) * 1.1 / 3;
+        var base = 2 * (1 +((craftingBoost * 0.05/100) + (getHouseBoost(craftingHouse) / 100)));
+        var consistency = 1000 / (1000 + (((consistencyBoost * 0.05/100)+(getHouseBoost(consistencyHouse) / 100)) * 1000));
+        var capacity = 2 * (((powerBoost * 0.05/100)+(getHouseBoost(powerHouse)/100)));
+        var minimum = base * (1 - consistency) * (1 + getVillageBoost(villageBoost) + (craftingLevel / 10000)) * (1 + kingdomBoost) * 1.1 / 3;
+        var maximum = (base + capacity) * (1 + getVillageBoost(villageBoost) + (craftingLevel / 10000)) * (1 + kingdomBoost) * 1.1 / 3;
         var baseAverage = (minimum+maximum)/2;
-        var trueAverage = baseAverage * (1+ (luckBoost * 0.05/100)+(luckHouse/100));
-        return trueAverage;
+        var trueAverage = baseAverage * (1+ (luckBoost * 0.035/100)+(getHouseBoost(luckHouse)/100));
+        return (trueAverage + 20);
     }
 
     function updateBoosts() {
@@ -167,7 +190,7 @@
         var craftBoosts = playerGeneralService.playerBoostsService.boosts.crafting;
         var craftHouse = playerGeneralService.playerHouseService.houseItems.bedroom;
         var craftingLevel = playerGeneralService.playerLevelsService.crafting.level;
-        var villageBoost = playerGeneralService.playerVillageService.buildings.mason.amount / 100;
+        var villageBoost = playerGeneralService.playerVillageService.buildings.mason.amount;
         var kingdomBoost = playerGeneralService.playerKingdomService.kingdomData.tiles.length * 0.05;
         var luckBoost = craftBoosts[0].amount;
         var powerBoost = craftBoosts[1].amount;
